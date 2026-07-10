@@ -77,18 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BrixOSINT — Console OSINT de test" },
+      { title: "BrixOSINT — Recherche multi-critères (Test)" },
       {
         name: "description",
         content:
-          "Console de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives.",
+          "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives.",
       },
       { name: "author", content: "BrixOSINT" },
-      { property: "og:title", content: "BrixOSINT — Console OSINT de test" },
-      { property: "og:description", content: "Recherche OSINT multi-critères (données fictives)." },
+      { property: "og:title", content: "BrixOSINT — Recherche multi-critères (Test)" },
+      { property: "og:description", content: "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
 
+      { name: "twitter:title", content: "BrixOSINT — Recherche multi-critères (Test)" },
+      { name: "twitter:description", content: "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/efee31f5-cd43-48ef-824a-dd0e225801b0/id-preview-17f7bb02--9750cb53-c42b-43ac-a7f8-c396f410126a.lovable.app-1783711869436.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/efee31f5-cd43-48ef-824a-dd0e225801b0/id-preview-17f7bb02--9750cb53-c42b-43ac-a7f8-c396f410126a.lovable.app-1783711869436.png" },
     ],
     links: [
       {

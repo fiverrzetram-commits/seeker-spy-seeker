@@ -19,8 +19,8 @@ export const Route = createFileRoute("/")({
         content:
           "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives.",
       },
-      { property: "og:title", content: "BrixOSINT — Test OSINT" },
-      { property: "og:description", content: "Recherche OSINT de test (données fictives)." },
+      { property: "og:title", content: "BrixOSINT — Recherche multi-critères (Test)" },
+      { property: "og:description", content: "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives." },
     ],
   }),
   component: Index,
