@@ -1,6 +1,21 @@
 const BASE = "https://api.brixhub.is/api/v1";
 
-export async function brixFetch(path: string, init?: RequestInit) {
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+export interface BrixResponse {
+  status: number;
+  message?: string;
+  data?: { results?: Record<string, JsonValue>[] } | null;
+  meta?: Record<string, JsonValue> | null;
+}
+
+export async function brixFetch(path: string, init?: RequestInit): Promise<BrixResponse> {
   const apiKey = process.env.BRIXHUB_API_KEY;
   if (!apiKey) {
     return { status: 500, message: "BRIXHUB_API_KEY manquante", data: null, meta: null };
@@ -15,16 +30,10 @@ export async function brixFetch(path: string, init?: RequestInit) {
     },
   });
   const text = await res.text();
-  let body: unknown;
   try {
-    body = text ? JSON.parse(text) : null;
+    return (text ? JSON.parse(text) : { status: res.status, data: null }) as BrixResponse;
   } catch {
-    body = { status: res.status, message: text || "Réponse invalide", data: null };
+    return { status: res.status, message: text || "Réponse invalide", data: null };
   }
-  return body as {
-    status: number;
-    message?: string;
-    data?: { results?: Record<string, unknown>[] } | null;
-    meta?: Record<string, unknown> | null;
-  };
 }
+
