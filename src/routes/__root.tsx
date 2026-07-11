@@ -77,24 +77,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BrixOSINT — Recherche multi-critères (Test)" },
+      { title: "SeeKHub — OSINT Investigation Platform" },
       {
         name: "description",
         content:
-          "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives.",
+          "SeeKHub — Advanced OSINT search, reverse lookup, and data aggregation platform for professional investigation.",
       },
-      { name: "author", content: "BrixOSINT" },
-      { property: "og:title", content: "BrixOSINT — Recherche multi-critères (Test)" },
-      { property: "og:description", content: "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives." },
+      { name: "author", content: "SeeKHub" },
+      { property: "og:title", content: "SeeKHub — OSINT Investigation Platform" },
+      { property: "og:description", content: "Advanced OSINT search, reverse lookup, and data aggregation platform for professional investigation." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-
-      { name: "twitter:title", content: "BrixOSINT — Recherche multi-critères (Test)" },
-      { name: "twitter:description", content: "Interface de test pour l'API BrixHub : recherche OSINT multi-critères et reverse lookup. Données 100% fictives." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/efee31f5-cd43-48ef-824a-dd0e225801b0/id-preview-17f7bb02--9750cb53-c42b-43ac-a7f8-c396f410126a.lovable.app-1783711869436.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/efee31f5-cd43-48ef-824a-dd0e225801b0/id-preview-17f7bb02--9750cb53-c42b-43ac-a7f8-c396f410126a.lovable.app-1783711869436.png" },
+      { name: "twitter:title", content: "SeeKHub — OSINT Investigation Platform" },
+      { name: "twitter:description", content: "Advanced OSINT search, reverse lookup, and data aggregation platform for professional investigation." },
     ],
     links: [
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -110,7 +116,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
