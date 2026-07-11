@@ -209,6 +209,51 @@
   46% { opacity: 1; }
 }
 
+@keyframes glitch {
+  0%, 100% { transform: translate(0); text-shadow: none; }
+  20% { transform: translate(-1px, 1px); text-shadow: 1px 0 oklch(0.82 0.18 195 / 0.8), -1px 0 oklch(0.78 0.20 145 / 0.8); }
+  40% { transform: translate(1px, -1px); text-shadow: -1px 0 oklch(0.82 0.18 195 / 0.8), 1px 0 oklch(0.78 0.20 145 / 0.8); }
+  60% { transform: translate(-1px, 0); text-shadow: 1px 0 oklch(0.82 0.18 195 / 0.6); }
+  80% { transform: translate(1px, 0); text-shadow: -1px 0 oklch(0.78 0.20 145 / 0.6); }
+}
+
+@keyframes data-stream {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(2000%); opacity: 0; }
+}
+
+@keyframes border-trace {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-down {
+  0% { opacity: 0; transform: translateY(-12px); max-height: 0; }
+  100% { opacity: 1; transform: translateY(0); max-height: 1000px; }
+}
+
+@keyframes count-up {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotate-glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .neon-glow {
   animation: neon-glow 2s ease-in-out infinite;
 }
@@ -247,6 +292,69 @@
 }
 .flicker {
   animation: flicker 4s linear infinite;
+}
+.glitch {
+  animation: glitch 0.4s steps(2, end);
+}
+.data-stream {
+  animation: data-stream 4s linear infinite;
+}
+.scale-in {
+  animation: scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.slide-down {
+  animation: slide-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  overflow: hidden;
+}
+.count-up {
+  animation: count-up 0.5s ease-out both;
+}
+.rotate-glow {
+  animation: rotate-glow 8s linear infinite;
+}
+
+/* Staggered list animations — child fade with delay based on index */
+.stagger > * {
+  opacity: 0;
+  animation: fade-in-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger > *:nth-child(8) { animation-delay: 0.32s; }
+.stagger > *:nth-child(n+9) { animation-delay: 0.36s; }
+
+/* Animated gradient border on hover for cards */
+@utility border-trace {
+  position: relative;
+}
+@utility border-trace-active {
+  background: linear-gradient(90deg,
+    oklch(0.82 0.18 195) 0%,
+    oklch(0.78 0.20 145) 50%,
+    oklch(0.82 0.18 195) 100%);
+  background-size: 200% 100%;
+  animation: border-trace 2s linear infinite;
+}
+
+/* Terminal-style blinking caret */
+.caret::after {
+  content: "_";
+  animation: blink-caret 1s step-end infinite;
+  color: var(--color-cyan);
+}
+
+/* Animated background glow pulse */
+@keyframes bg-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+.bg-pulse {
+  animation: bg-pulse 6s ease-in-out infinite;
 }
 
 /* ===== Futuristic Utilities ===== */

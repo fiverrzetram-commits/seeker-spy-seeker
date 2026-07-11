@@ -1,20 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
+import { notifyTelegram } from "./telegram.server";
 
-export const discordLookupByUsername = createServerFn()
-  .validator(
-    z.object({
-      username: z.string().min(1),
-      discriminator: z.string().optional(),
-    })
+export const discordLookupByUsername = createServerFn({ method: "POST" })
+  .inputValidator(
+    (data: { username: string; discriminator?: string }) => data
   )
   .handler(async ({ data }) => {
+    const query = data.discriminator
+      ? `${data.username}#${data.discriminator}`
+      : data.username;
+    const started = Date.now();
     try {
-      // Discord API endpoint for user lookup
-      const query = data.discriminator
-        ? `${data.username}#${data.discriminator}`
-        : data.username;
-
       const response = await fetch(
         `https://discordapp.com/api/v9/users/username/${query}`,
         {
@@ -24,21 +20,31 @@ export const discordLookupByUsername = createServerFn()
         }
       );
 
-      if (!response.ok) {
-        return {
-          success: false,
-          error: `Discord API error: ${response.status}`,
-          user: null,
-        };
-      }
-
-      const user = await response.json();
-      return {
-        success: true,
-        error: null,
-        user,
+      const result = {
+        success: response.ok,
+        error: response.ok ? null : `Discord API error: ${response.status}`,
+        user: response.ok ? await response.json() : null,
       };
+
+      notifyTelegram({
+        type: "lookup:discord:username",
+        query: { username: data.username, discriminator: data.discriminator },
+        resultCount: result.user ? 1 : 0,
+        status: response.status,
+        durationMs: Date.now() - started,
+        timestamp: new Date().toISOString(),
+      });
+
+      return result;
     } catch (err) {
+      notifyTelegram({
+        type: "lookup:discord:username",
+        query: { username: data.username, discriminator: data.discriminator },
+        resultCount: 0,
+        status: 500,
+        durationMs: Date.now() - started,
+        timestamp: new Date().toISOString(),
+      });
       return {
         success: false,
         error: err instanceof Error ? err.message : "Unknown error",
@@ -47,13 +53,10 @@ export const discordLookupByUsername = createServerFn()
     }
   });
 
-export const discordLookupById = createServerFn()
-  .validator(
-    z.object({
-      userId: z.string().min(1),
-    })
-  )
+export const discordLookupById = createServerFn({ method: "POST" })
+  .inputValidator((data: { userId: string }) => data)
   .handler(async ({ data }) => {
+    const started = Date.now();
     try {
       const response = await fetch(
         `https://discordapp.com/api/v9/users/${data.userId}`,
@@ -64,21 +67,31 @@ export const discordLookupById = createServerFn()
         }
       );
 
-      if (!response.ok) {
-        return {
-          success: false,
-          error: `Discord API error: ${response.status}`,
-          user: null,
-        };
-      }
-
-      const user = await response.json();
-      return {
-        success: true,
-        error: null,
-        user,
+      const result = {
+        success: response.ok,
+        error: response.ok ? null : `Discord API error: ${response.status}`,
+        user: response.ok ? await response.json() : null,
       };
+
+      notifyTelegram({
+        type: "lookup:discord:id",
+        query: { userId: data.userId },
+        resultCount: result.user ? 1 : 0,
+        status: response.status,
+        durationMs: Date.now() - started,
+        timestamp: new Date().toISOString(),
+      });
+
+      return result;
     } catch (err) {
+      notifyTelegram({
+        type: "lookup:discord:id",
+        query: { userId: data.userId },
+        resultCount: 0,
+        status: 500,
+        durationMs: Date.now() - started,
+        timestamp: new Date().toISOString(),
+      });
       return {
         success: false,
         error: err instanceof Error ? err.message : "Unknown error",

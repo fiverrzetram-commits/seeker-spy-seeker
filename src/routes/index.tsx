@@ -206,11 +206,11 @@ function Index() {
               <div className="absolute inset-0 rounded-md border border-cyan/20 group-hover:border-cyan/60 transition-colors" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground tracking-tight font-mono">
+              <h1 className="text-lg font-bold text-foreground tracking-tight font-mono group-hover:glitch">
                 SeeK<span className="text-cyan">Hub</span>
               </h1>
               <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">
-                OSINT Investigation Platform
+                <span className="caret" />OSINT Investigation Platform
               </p>
             </div>
           </div>
@@ -356,7 +356,7 @@ function HomePage({ onNavigate }: { onNavigate: (mode: Mode) => void }) {
       </div>
 
       {/* Stats strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 stagger">
         {[
           ["6", "Modules"],
           ["50+", "Data Fields"],
@@ -365,10 +365,10 @@ function HomePage({ onNavigate }: { onNavigate: (mode: Mode) => void }) {
         ].map(([num, label]) => (
           <div
             key={label}
-            className="glass rounded-md border border-border/60 p-4 text-center hover:border-cyan/40 transition-all duration-300"
+            className="glass rounded-md border border-border/60 p-5 text-center hover:border-cyan/40 hover:-translate-y-1 hover:shadow-[0_0_24px_-8px_oklch(0.82_0.18_195/0.5)] transition-all duration-300 group"
           >
-            <div className="text-2xl font-bold font-mono text-cyan tabular-nums">{num}</div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1">
+            <div className="text-3xl font-bold font-mono text-cyan tabular-nums count-up group-hover:hologram transition-all">{num}</div>
+            <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
               {label}
             </div>
           </div>
@@ -376,7 +376,7 @@ function HomePage({ onNavigate }: { onNavigate: (mode: Mode) => void }) {
       </div>
 
       {/* Features */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6 stagger">
         <FeatureCard
           title="Multi-Criteria Search"
           description="Search across comprehensive databases using multiple fields and flexible matching algorithms."
@@ -396,7 +396,7 @@ function HomePage({ onNavigate }: { onNavigate: (mode: Mode) => void }) {
         <h3 className="text-2xl font-bold text-foreground text-center font-mono tracking-tight">
           Available Search Methods
         </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 stagger">
           <MethodCard
             title="General Search"
             description="Search by name, address, professional details, and more with flexible matching."
@@ -517,15 +517,37 @@ function ResultsShell({ children }: { children: React.ReactNode }) {
 }
 
 function LoadingState() {
+  const [dots, setDots] = useState("");
+  useEffect(() => {
+    const id = setInterval(() => {
+      setDots((d) => (d.length >= 3 ? "" : d + "."));
+    }, 350);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <div className="flex flex-col items-center justify-center h-[480px] gap-4">
-      <div className="relative h-12 w-12">
+    <div className="flex flex-col items-center justify-center h-[480px] gap-5">
+      <div className="relative h-16 w-16">
         <div className="absolute inset-0 rounded-full border-2 border-border" />
         <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-cyan animate-spin" />
+        <div className="absolute inset-2 rounded-full border border-transparent border-r-matrix/60 border-b-matrix/60 animate-spin" style={{ animationDuration: "1.4s", animationDirection: "reverse" }} />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-2 w-2 rounded-full bg-cyan animate-pulse shadow-[0_0_12px_oklch(0.82_0.18_195/0.8)]" />
+        </div>
       </div>
       <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-        Interrogating Database…
+        Interrogating Database<span className="text-cyan">{dots}</span>
       </p>
+      <div className="flex gap-1.5">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <span
+            key={i}
+            className="h-1 w-1 rounded-full bg-cyan/40"
+            style={{
+              animation: `pulse-ring 1s ease-in-out ${i * 0.15}s infinite`,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -726,7 +748,7 @@ function SearchPage({
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 stagger">
                 {meta && (
                   <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground flex gap-4 pb-2 border-b border-border/60">
                     <span>
@@ -824,7 +846,7 @@ function ReverseLookupPage({
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 stagger">
                 {meta && (
                   <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground flex gap-4 pb-2 border-b border-border/60">
                     <span>
@@ -930,7 +952,7 @@ function DiscordPage({
               <EmptyState />
             ) : discordResponse.success ? (
               <div className="space-y-6 animate-fade-in-up">
-                <div className="flex flex-col items-center gap-4 pb-6 border-b border-border/60">
+                <div className="flex flex-col items-center gap-4 pb-6 border-b border-border/60 scale-in">
                   {discordResponse.user?.avatar && (
                     <div className="relative">
                       <img
@@ -939,6 +961,7 @@ function DiscordPage({
                         className="w-24 h-24 rounded-full border-2 border-cyan/40 shadow-[0_0_24px_oklch(0.82_0.18_195/0.3)]"
                       />
                       <div className="absolute inset-0 rounded-full border border-cyan/20 animate-ping opacity-40" />
+                      <div className="absolute -inset-1 rounded-full border border-matrix/20 rotate-glow" style={{ borderStyle: "dashed" }} />
                     </div>
                   )}
                   <div className="text-center">
@@ -951,7 +974,7 @@ function DiscordPage({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 stagger">
                   {discordResponse.user?.discriminator && (
                     <InfoCell label="Discriminator" value={`#${discordResponse.user.discriminator}`} />
                   )}
