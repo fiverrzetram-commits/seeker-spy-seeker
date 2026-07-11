@@ -1,3 +1,13 @@
+/* Load .env in development for local testing — no-op in production */
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('dotenv').config();
+  } catch {
+    // ignore if dotenv is not installed
+  }
+}
+
 import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
