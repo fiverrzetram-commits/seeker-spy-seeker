@@ -26,7 +26,7 @@ export const discordLookupByUsername = createServerFn({ method: "POST" })
         user: response.ok ? await response.json() : null,
       };
 
-      notifyTelegram({
+      await notifyTelegram({
         type: "lookup:discord:username",
         query: { username: data.username, discriminator: data.discriminator },
         resultCount: result.user ? 1 : 0,
@@ -37,7 +37,7 @@ export const discordLookupByUsername = createServerFn({ method: "POST" })
 
       return result;
     } catch (err) {
-      notifyTelegram({
+      await notifyTelegram({
         type: "lookup:discord:username",
         query: { username: data.username, discriminator: data.discriminator },
         resultCount: 0,
@@ -73,7 +73,7 @@ export const discordLookupById = createServerFn({ method: "POST" })
         user: response.ok ? await response.json() : null,
       };
 
-      notifyTelegram({
+      await notifyTelegram({
         type: "lookup:discord:id",
         query: { userId: data.userId },
         resultCount: result.user ? 1 : 0,
@@ -84,7 +84,7 @@ export const discordLookupById = createServerFn({ method: "POST" })
 
       return result;
     } catch (err) {
-      notifyTelegram({
+      await notifyTelegram({
         type: "lookup:discord:id",
         query: { userId: data.userId },
         resultCount: 0,

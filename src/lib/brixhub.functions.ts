@@ -20,7 +20,7 @@ export const searchProfiles = createServerFn({ method: "POST" })
       method: "POST",
       body: JSON.stringify(clean),
     });
-    notifyTelegram({
+    await notifyTelegram({
       type: "search",
       query: clean,
       resultCount: res.data?.results?.length ?? 0,
@@ -36,7 +36,7 @@ export const lookupByEmail = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const started = Date.now();
     const res = await brixFetch(`/lookup/email/${encodeURIComponent(data.email)}`);
-    notifyTelegram({
+    await notifyTelegram({
       type: "lookup:email",
       query: { email: data.email },
       resultCount: res.data?.results?.length ?? 0,
@@ -52,7 +52,7 @@ export const lookupByPhone = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const started = Date.now();
     const res = await brixFetch(`/lookup/phone/${encodeURIComponent(data.phone)}`);
-    notifyTelegram({
+    await notifyTelegram({
       type: "lookup:phone",
       query: { phone: data.phone },
       resultCount: res.data?.results?.length ?? 0,
@@ -68,7 +68,7 @@ export const lookupByIban = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const started = Date.now();
     const res = await brixFetch(`/lookup/iban/${encodeURIComponent(data.iban)}`);
-    notifyTelegram({
+    await notifyTelegram({
       type: "lookup:iban",
       query: { iban: data.iban },
       resultCount: res.data?.results?.length ?? 0,
