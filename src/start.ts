@@ -1,3 +1,4 @@
+import './config/env';            // <-- validation des vars d'environnement (doit être le tout premier import)
 import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
