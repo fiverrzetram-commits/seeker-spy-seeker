@@ -1,3 +1,6 @@
+import 'dotenv/config'; // charge .env en environnement de dev si nécessaire
+import { CONFIG } from './config';
+
 const BASE = "https://api.brixhub.is/api/v1";
 
 export type JsonValue =
@@ -16,10 +19,26 @@ export interface BrixResponse {
 }
 
 export async function brixFetch(path: string, init?: RequestInit): Promise<BrixResponse> {
-  const apiKey = process.env.BRIXHUB_API_KEY;
+  // Cherche la clé dans plusieurs emplacements (priorité : process.env > CONFIG (Vite) )
+  const apiKey =
+    (process.env && process.env.BRIXHUB_API_KEY) ||
+    (typeof CONFIG !== 'undefined' ? CONFIG.BRIXHUB_API_KEY : undefined) ||
+    (process.env && process.env.VITE_BRIXHUB_API_KEY) ||
+    '';
+
+  // Debug minimal : on logge uniquement la présence et la source (pas la clé)
   if (!apiKey) {
+    console.error('BRIXHUB_API_KEY manquante (recherché dans process.env et VITE/CONFIG).');
     return { status: 500, message: "BRIXHUB_API_KEY manquante", data: null, meta: null };
+  } else {
+    // Pour debug, indiquer la source réelle (utile en dev). Remove ou passez en trace en prod.
+    const source =
+      process.env.BRIXHUB_API_KEY ? 'process.env.BRIXHUB_API_KEY' :
+      CONFIG?.BRIXHUB_API_KEY ? 'CONFIG.VITE_BRIXHUB_API_KEY' :
+      process.env.VITE_BRIXHUB_API_KEY ? 'process.env.VITE_BRIXHUB_API_KEY' : 'unknown';
+    console.debug(`BRIXHUB_API_KEY trouvé via ${source}`);
   }
+
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
@@ -36,4 +55,3 @@ export async function brixFetch(path: string, init?: RequestInit): Promise<BrixR
     return { status: res.status, message: text || "Réponse invalide", data: null };
   }
 }
-
